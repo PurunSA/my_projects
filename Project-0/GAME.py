@@ -1,24 +1,32 @@
-def score_game(random_predict) -> int:
-    """За какое количество попыток в среднем из 1000 подходов угадывает наш алгоритм
+import random  # Импортируем модуль random для генерации случайных чисел
 
-    Args:
-        random_predict ([type]): функция угадывания
+# Функция, реализующая бинарный поиск и возвращающая количество попыток для угадывания заданного числа
+def binary_search_guess(secret_number):
+    low = 1               # Нижняя граница диапазона
+    high = 100            # Верхняя граница диапазона
+    attempts = 0          # Счётчик количества попыток
 
-    Returns:
-        int: среднее количество попыток
-    """
+    while low <= high:    # Пока границы не сошлись
+        attempts += 1     # Увеличиваем счётчик попыток
+        guess = (low + high) // 2  # Берём середину текущего диапазона
 
-    count_ls = [] # список для сохранения количества попыток
-    np.random.seed(1) # фиксируем сид для воспроизводимости
-    random_array = np.random.randint(1, 101, size=(1000)) # загадали список чисел
+        if guess == secret_number:     # Если угадали число
+            return attempts            # Возвращаем количество попыток
+        elif guess < secret_number:    # Если предположение меньше загаданного числа
+            low = guess + 1            # Сдвигаем нижнюю границу вверх
+        else:                          # Иначе (если предположение больше)
+            high = guess - 1           # Сдвигаем верхнюю границу вниз
 
-    for number in random_array:
-        count_ls.append(random_predict(number))
+# Функция, симулирующая угадывание 1000 случайных чисел и подсчитывающая среднее число попыток
+def simulate_guesses(trials=1000):
+    total_attempts = 0     # Суммарное количество попыток за все игры
 
-    score = int(np.mean(count_ls)) # находим среднее количество попыток
+    for _ in range(trials):                   # Повторяем процесс угадывания `trials` раз (1000 по умолчанию)
+        secret_number = random.randint(1, 100)  # Генерируем случайное число от 1 до 100
+        attempts = binary_search_guess(secret_number)  # Угадываем число и получаем количество попыток
+        total_attempts += attempts                     # Добавляем попытки к общему счётчику
 
-    print(f'Ваш алгоритм угадывает число в среднем за: {score} попыток')
-    return(score)
+    average_attempts = total_attempts / trials  # Вычисляем среднее количество попыток
+    print(f"Среднее количество попыток за {trials} игр: {average_attempts:.2f}")  # Выводим результат
 
-# RUN
-score_game(random_predict)
+simulate_guesses()  # Запускаем симуляцию угадывания чисел
