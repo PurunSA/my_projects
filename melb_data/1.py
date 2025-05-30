@@ -1,4 +1,5 @@
 import pandas as pd
 
-melb_data = pd.read_csv('melb_data/melb_data_ps.csv', sep=',')
-melb_data.head()
+url = 'https://raw.githubusercontent.com/PurunSA/my_projects/refs/heads/main/melb_data/melb_data_ps.csv'
+data = pd.read_csv(url)
+print(data.head())
